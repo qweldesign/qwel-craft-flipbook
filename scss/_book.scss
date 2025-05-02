@@ -1,0 +1,143 @@
+/**
+ * Book
+ */
+
+$unit:             30vw; // 基本単位
+$unit-md:          270px; // 基本単位を画面幅900px時にpx変換
+$unit-lg:          360px; // 基本単位を画面幅1200px時にpx変換
+$link-color:       theme-color("primary");
+$link-hover-color: color-active("primary");
+
+$book-rate:        7 / 5;
+$flip-rate:        8 / 7;
+
+.book {
+  position: relative;
+  width: 100%; // 全幅のうち60vw/30vw(モバイル/デスクトップ)をpageとして使用
+  height: min($unit * 2 * $book-rate * $flip-rate, $unit-md * 2 * $book-rate * $flip-rate); // 幅60vwに対しアスペクト比 5:7 (高さ84vw) だが、これにflip幅を加算して8/7を乗じる
+  margin-bottom: 3rem;
+  overflow: hidden;
+
+  @media (min-width: breakpoint("md")) {
+    height: min($unit * $book-rate * $flip-rate, $unit-lg * $book-rate * $flip-rate); // 幅30vwに対しアスペクト比 5:7  (高さ42vw) だが、これにflip幅を加算して8/7を乗じる
+  }
+
+  &__pages {
+    position: absolute;
+    top: 0;
+    right: min((100vw - $unit * 2) / 2, (900px - $unit-md * 2) / 2); // 幅60vwのpageを中央寄せ
+    bottom: 0;
+    z-index: 1;
+    width: min($unit * 4, $unit-md * 4);
+    height: min($unit * 2 * $book-rate, $unit-md * 2 * $book-rate);
+    margin: auto;
+    background-color: #e0e0e0;
+
+    @media (min-width: breakpoint("md")) {
+      right: calc(50% - min($unit / 2, $unit-lg / 2)); // 右ページ全体を中央寄せ
+      width: min($unit * 2, $unit-lg * 2);
+      height: min($unit * $book-rate, $unit-lg * $book-rate);
+    }
+  }
+
+  &__page {
+    position: absolute;
+    top: 0;
+    left: 50%; // flipの際右側からコンテンツが現れる
+    z-index: 10;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  &__content {
+    position: relative;
+    width: min($unit * 2, $unit-md * 2);
+    height: 100%;
+    padding: min($unit / 4, $unit-md / 4) min($unit / 6, $unit-md / 6);
+    background-color: #ffffff;
+
+    @media (min-width: breakpoint("md")) {
+      width: min($unit, $unit-lg);
+      padding: min($unit / 8, $unit-lg / 8) min($unit / 12, $unit-lg / 12);
+    }
+
+    .book__page:nth-child(3n+1) & {
+      //background-color: #ff8;
+    }
+
+    .book__page:nth-child(3n-1) & {
+      //background-color: #8ff;
+    }
+
+    .book__page:nth-child(3n) & {
+      //background-color: #f8f;
+    }
+
+    h3 {
+      font-size: min($unit / 8, $unit-md / 16);
+    }
+    
+    p {
+      margin: 0;
+      font-size: min($unit / 16, $unit-md / 32);
+    }
+  }
+
+  &__pageNum {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: min($unit / 12, $unit-lg / 12);
+    margin: auto;
+    text-align: center;
+  }
+
+  &__canvas {
+    position: absolute;
+    top: 0;
+    right: min((100vw - $unit * 2) / 2 - $unit / 10, (900px - $unit-md * 2) / 2 - $unit-md / 10); // pages - 3vw (表紙描画分)
+    z-index: 100;
+    width: min($unit * 4 + $unit / 5, $unit-md * 4 + $unit-md / 5); // pages + 3vw * 2 (表紙描画分)
+    height: 100%;
+
+    @media (min-width: breakpoint("md")) {
+      right: calc(50% - min($unit * 11 / 20, $unit-lg * 11 / 20)); // 右ページ全体を中央寄せ
+      width: min($unit * 21 / 10, $unit-lg * 21 / 10); // pages + 1.5vw * 2 (表紙描画分)
+    }
+  }
+  
+  &__prev, &__next{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 110;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    text-align: center;
+    outline: 0;
+    cursor: pointer;
+
+    @include use-icon(theme-color("lighter"), $body-color, theme-color("secondary"), $body-bg, 50%);
+  }
+
+  &__prev {
+    left: min($unit / 6, $unit-md / 6);
+
+    @media (min-width: breakpoint("md")) {
+      left: $unit-lg * 11 / 12;
+    }
+  }
+
+  &__next {
+    right: min($unit / 6, $unit-md / 6);
+
+    @media (min-width: breakpoint("md")) {
+      right: $unit-lg * 11 / 12;
+    }
+  }
+}
